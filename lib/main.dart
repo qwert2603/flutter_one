@@ -66,7 +66,8 @@ class RandomWordsState extends State<RandomWords> {
             ],
           ),
         ),
-        onTapUp: (d) => print("trailing onTapUp ${d.globalPosition} ${d.runtimeType}"),
+        onTapUp: (d) =>
+            print("trailing onTapUp ${d.globalPosition} ${d.runtimeType}"),
       ),
       onTap: () {
         setState(() {
@@ -111,21 +112,89 @@ class RandomWordsState extends State<RandomWords> {
       appBar: AppBar(
         title: Text("Flutter One"),
         actions: <Widget>[
-          new IconButton(
+          IconButton(
             color: Colors.black,
             highlightColor: Colors.blueAccent.withAlpha(42),
             splashColor: Colors.deepOrange.withAlpha(54),
             icon: const Icon(Icons.list),
             onPressed: _pushSaved,
-          )
+          ),
+          IconButton(
+            icon: const Icon(Icons.adb),
+            onPressed: _anth,
+          ),
         ],
       ),
       body: _buildSuggestions(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepOrangeAccent,
+        tooltip: "fab tooltip",
+        child: Container(
+          padding: EdgeInsets.only(left: 4),
+          child: Icon(Icons.clear_all),
+        ),
+        onPressed: () => setState(() => _saved.clear()),
+      ),
     );
+  }
+
+  void _anth() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) => AnthPage()));
   }
 }
 
 class RandomWords extends StatefulWidget {
   @override
   RandomWordsState createState() => new RandomWordsState();
+}
+
+class AnthPage extends StatefulWidget {
+  @override
+  State createState() => _AnthPageState();
+}
+
+class _AnthPageState extends State<AnthPage> {
+  bool toggle = true;
+
+  void _toggle() {
+    setState(() {
+      toggle = !toggle;
+    });
+  }
+
+  _getToggleChild() {
+    if (toggle) {
+      return Text(
+        'Toggle One',
+        style: TextStyle(
+            fontSize: 32,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold),
+      );
+    } else {
+      return OutlineButton(
+        highlightElevation: 0,
+        onPressed: () {},
+        borderSide: BorderSide(color: Colors.blue),
+        child: Text('Toggle Two'),
+        shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(4.0)),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: _getToggleChild(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _toggle,
+        tooltip: 'Update Text',
+        child: Icon(Icons.update),
+      ),
+    );
+  }
 }
