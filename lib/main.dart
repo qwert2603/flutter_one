@@ -1,5 +1,6 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_one/anim.dart';
 
 void main() => runApp(MyApp());
 
@@ -119,10 +120,15 @@ class RandomWordsState extends State<RandomWords> {
             icon: const Icon(Icons.list),
             onPressed: _pushSaved,
           ),
+          IconButton(icon: const Icon(Icons.adb), onPressed: _anth),
           IconButton(
-            icon: const Icon(Icons.adb),
-            onPressed: _anth,
-          ),
+              icon: const Icon(Icons.ac_unit),
+              tooltip: "snow",
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        MyFadeTest(title: "asdfg")));
+              }),
         ],
       ),
       body: _buildSuggestions(),
@@ -130,7 +136,7 @@ class RandomWordsState extends State<RandomWords> {
         backgroundColor: Colors.deepOrangeAccent,
         tooltip: "fab tooltip",
         child: Container(
-          padding: EdgeInsets.only(left: 4),
+          padding: EdgeInsets.only(left: 6),
           child: Icon(Icons.clear_all),
         ),
         onPressed: () => setState(() => _saved.clear()),
