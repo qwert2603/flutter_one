@@ -17,9 +17,17 @@ class _MyFadeTest extends State<MyFadeTest> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     controller = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
+        duration: const Duration(milliseconds: 1000), vsync: this);
     curve = CurvedAnimation(parent: controller, curve: Curves.easeIn);
     fosi = CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
   }
 
   @override
@@ -28,6 +36,7 @@ class _MyFadeTest extends State<MyFadeTest> with TickerProviderStateMixin {
       appBar: AppBar(title: Text(widget.title)),
       body: Center(
         child: ScaleTransition(
+          alignment: Alignment.centerRight,
           scale: fosi,
           child: FadeTransition(
             opacity: curve,
@@ -39,12 +48,13 @@ class _MyFadeTest extends State<MyFadeTest> with TickerProviderStateMixin {
         tooltip: 'fade',
         child: Icon(Icons.brush),
         onPressed: () {
-          if (controller.isAnimating) return;
-          if (controller.isCompleted) {
-            controller.reverse();
-          } else {
-            controller.forward();
-          }
+          controller.forward();
+//          if (controller.isAnimating) return;
+//          if (controller.isCompleted) {
+//            controller.reverse();
+//          } else {
+//            controller.forward();
+//          }
         },
       ),
     );

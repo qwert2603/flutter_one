@@ -1,6 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_one/anim.dart';
+import 'package:flutter_one/paint.dart';
 
 void main() => runApp(MyApp());
 
@@ -128,6 +129,14 @@ class RandomWordsState extends State<RandomWords> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
                         MyFadeTest(title: "asdfg")));
+              }),
+          IconButton(
+              icon: const Icon(Icons.airplay, color: Colors.redAccent),
+              tooltip: "pnt",
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        Scaffold(body: Signature())));
               }),
         ],
       ),
