@@ -19,10 +19,35 @@ class QPage extends StatelessWidget {
             ),
             FromAndroidReceiver(),
             SizedBox(height: 12),
+            Image.asset(
+              "assets/images/ocv_part.png",
+              width: 140,
+            ),
+            SizedBox(height: 12),
             MaterialButton(
               color: Colors.deepOrange,
               onPressed: () => Navigator.of(context).pop("result = 42"),
               child: Text("back", style: TextStyle(color: Colors.white)),
+            ),
+            SizedBox(height: 12),
+            MaterialButton(
+              color: Colors.deepOrange,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Scaffold(
+                          appBar: AppBar(),
+                          body: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Center(
+                              child: Image.asset("assets/images/ocv.jpg"),
+                            ),
+                          ),
+                        ),
+                  ),
+                );
+              },
+              child: Text("image", style: TextStyle(color: Colors.white)),
             )
           ],
         ),
