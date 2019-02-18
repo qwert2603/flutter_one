@@ -15,5 +15,10 @@
   "@fish": {
     "type": "text",
     "placeholders": {}
+  },
+  "another": "another",
+  "@another": {
+    "type": "text",
+    "placeholders": {}
   }
 }

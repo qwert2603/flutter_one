@@ -8,7 +8,7 @@ import 'l10n/messages_all.dart';
 class AppLocalizations {
   static Future<AppLocalizations> load(Locale locale) {
     final String name =
-    locale.countryCode == null ? locale.languageCode : locale.toString();
+        locale.countryCode == null ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((bool _) {
@@ -31,7 +31,12 @@ class AppLocalizations {
   }
 
   String get fish => Intl.message("Fish_desc", name: "fish");
+
+  String get another => Intl.message("another");
 }
+
+// flutter pub pub run intl_translation:extract_to_arb --output-dir=lib/l10n lib/localizations.dart
+// flutter pub pub run intl_translation:generate_from_arb --output-dir=lib/l10n    --no-use-deferred-loading lib/localizations.dart lib/l10n/intl_*.arb
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();

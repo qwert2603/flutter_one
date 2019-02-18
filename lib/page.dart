@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_one/localizations.dart';
 
 class QPage extends StatelessWidget {
   final String text;
@@ -36,7 +37,9 @@ class QPage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) => Scaffold(
-                          appBar: AppBar(),
+                          appBar: AppBar(
+                            title: Text(AppLocalizations.of(context).another),
+                          ),
                           body: Padding(
                             padding: const EdgeInsets.all(24.0),
                             child: Center(
