@@ -1,0 +1,19 @@
+{
+  "@@last_modified": "2019-02-18T13:26:11.281502",
+  "title": "Привет Мир Приложение",
+  "@title": {
+    "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hello": "Привет",
+  "@hello": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "fish": "Рыба",
+  "@fish": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

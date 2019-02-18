@@ -1,7 +1,9 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_one/anim.dart';
 import 'package:flutter_one/isol.dart';
+import 'package:flutter_one/localizations.dart';
 import 'package:flutter_one/page.dart';
 import 'package:flutter_one/paint.dart';
 
@@ -11,7 +13,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter One',
+      localizationsDelegates: [
+        AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [Locale("en"), Locale("ru")],
+      onGenerateTitle: (BuildContext context) =>
+          AppLocalizations.of(context).title,
+//      title: 'Flutter One',
       theme: ThemeData(
         primaryColor: Colors.green,
         dividerColor: Colors.deepOrange,
@@ -120,7 +130,7 @@ class RandomWordsState extends State<RandomWords> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flutter One"),
+        title: Text(AppLocalizations.of(context).hello),
         actions: <Widget>[
           IconButton(
             color: Colors.black,
@@ -136,7 +146,7 @@ class RandomWordsState extends State<RandomWords> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        MyFadeTest(title: "asdfg")));
+                        MyFadeTest(title: AppLocalizations.of(context).fish)));
               }),
           IconButton(
               icon: const Icon(Icons.airplay, color: Colors.redAccent),
