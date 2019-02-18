@@ -1,6 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_one/anim.dart';
+import 'package:flutter_one/isol.dart';
 import 'package:flutter_one/page.dart';
 import 'package:flutter_one/paint.dart';
 
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/fish': (context) => QPage(text: "fish"),
         '/anth': (context) => QPage(text: "anth"),
-        '/qwert': (context) => QPage(text: "qwert")
+        '/qwert': (context) => QPage(text: "qwert"),
+        '/isol': (context) => IsolPage()
       },
     );
   }
@@ -144,6 +146,9 @@ class RandomWordsState extends State<RandomWords> {
                     builder: (BuildContext context) =>
                         Scaffold(body: Signature())));
               }),
+          IconButton(
+              icon: const Icon(Icons.iso),
+              onPressed: () => Navigator.of(context).pushNamed("/isol")),
         ],
       ),
       body: _buildSuggestions(),
