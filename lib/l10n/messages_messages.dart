@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "another" : MessageLookupByLibrary.simpleMessage("another"),
     "fish" : MessageLookupByLibrary.simpleMessage("Fish_desc"),
     "hello" : MessageLookupByLibrary.simpleMessage("Hello"),
+    "text1" : MessageLookupByLibrary.simpleMessage("text1"),
+    "text2" : MessageLookupByLibrary.simpleMessage("text2"),
     "title" : MessageLookupByLibrary.simpleMessage("Hello world App")
   };
 }

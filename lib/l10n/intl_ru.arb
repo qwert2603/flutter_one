@@ -20,5 +20,10 @@
   "@another": {
     "type": "text",
     "placeholders": {}
+  },
+  "text1": "text1_ru",
+  "@text1": {
+    "type": "text",
+    "placeholders": {}
   }
 }

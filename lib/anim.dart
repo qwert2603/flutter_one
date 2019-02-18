@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_one/localizations.dart';
 import 'package:flutter_one/page.dart';
 
 class MyFadeTest extends StatefulWidget {
@@ -43,13 +44,20 @@ class _MyFadeTest extends State<MyFadeTest> with TickerProviderStateMixin {
         ],
       ),
       body: Center(
-        child: ScaleTransition(
-          alignment: Alignment.centerRight,
-          scale: fosi,
-          child: FadeTransition(
-            opacity: curve,
-            child: FlutterLogo(size: 200),
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ScaleTransition(
+              alignment: Alignment.centerRight,
+              scale: fosi,
+              child: FadeTransition(
+                opacity: curve,
+                child: FlutterLogo(size: 200),
+              ),
+            ),
+            Text(AppLocalizations.of(context).text1),
+            Text(AppLocalizations.of(context).text2),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

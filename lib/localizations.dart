@@ -33,6 +33,10 @@ class AppLocalizations {
   String get fish => Intl.message("Fish_desc", name: "fish");
 
   String get another => Intl.message("another");
+
+  String get text1 => Intl.message("text1");
+
+  String get text2 => Intl.message("text2");
 }
 
 // flutter pub pub run intl_translation:extract_to_arb --output-dir=lib/l10n lib/localizations.dart
