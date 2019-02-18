@@ -1,6 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_one/anim.dart';
+import 'package:flutter_one/page.dart';
 import 'package:flutter_one/paint.dart';
 
 void main() => runApp(MyApp());
@@ -17,6 +18,11 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.cyan.withAlpha(42),
       ),
       home: RandomWords(),
+      routes: <String, WidgetBuilder>{
+        '/fish': (context) => QPage(text: "fish"),
+        '/anth': (context) => QPage(text: "anth"),
+        '/qwert': (context) => QPage(text: "qwert")
+      },
     );
   }
 }

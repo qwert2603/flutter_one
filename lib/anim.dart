@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_one/page.dart';
 
 class MyFadeTest extends StatefulWidget {
   MyFadeTest({Key key, this.title}) : super(key: key);
@@ -33,7 +34,14 @@ class _MyFadeTest extends State<MyFadeTest> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: <Widget>[
+          QIconButton(routeName: '/fish'),
+          QIconButton(routeName: '/anth'),
+          QIconButton(routeName: '/qwert')
+        ],
+      ),
       body: Center(
         child: ScaleTransition(
           alignment: Alignment.centerRight,
