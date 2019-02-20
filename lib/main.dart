@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_one/anim.dart';
 import 'package:flutter_one/isol.dart';
+import 'package:flutter_one/lifecycle.dart';
 import 'package:flutter_one/localizations.dart';
 import 'package:flutter_one/page.dart';
 import 'package:flutter_one/paint.dart';
@@ -159,6 +160,10 @@ class RandomWordsState extends State<RandomWords> {
           IconButton(
               icon: const Icon(Icons.iso),
               onPressed: () => Navigator.of(context).pushNamed("/isol")),
+          IconButton(
+              icon: const Icon(Icons.details),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LifecycleWatcher()))),
         ],
       ),
       body: _buildSuggestions(),
