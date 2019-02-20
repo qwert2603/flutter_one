@@ -33,27 +33,29 @@ class QPage extends StatelessWidget {
             SizedBox(height: 12),
             MaterialButton(
               color: Colors.deepOrange,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Scaffold(
-                          appBar: AppBar(
-                            title: Text(AppLocalizations.of(context).another),
-                          ),
-                          body: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Center(
-                              child: Image.asset("assets/images/ocv.jpg"),
-                            ),
-                          ),
-                        ),
-                  ),
-                );
-              },
+              onPressed: () => openFullPicture(context),
               child: Text("image", style: TextStyle(color: Colors.white)),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  void openFullPicture(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => Scaffold(
+              appBar: AppBar(
+                title: Text(AppLocalizations.of(context).another),
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Center(
+                  child: Image.asset("assets/images/ocv.jpg"),
+                ),
+              ),
+            ),
       ),
     );
   }
