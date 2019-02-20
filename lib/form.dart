@@ -66,13 +66,13 @@ class _EmailTextFieldState extends State<EmailTextField> {
         });
       },
       onSubmitted: (text) async {
-        _saveEmail(text);
+        int counter = await _saveEmail(text);
         var result = await showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) => AlertDialog(
                   content: Text(text),
-                  title: Text("title"),
+                  title: Text("title $counter"),
                   actions: <Widget>[
                     FlatButton(
                       onPressed: () => Navigator.of(context).pop(text),
@@ -88,13 +88,14 @@ class _EmailTextFieldState extends State<EmailTextField> {
     );
   }
 
-  _saveEmail(String email) async {
+  Future<int> _saveEmail(String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int counter = (prefs.getInt('counter') ?? 0) + 1;
     print('Pressed $counter times.');
     print('prev email =  ${prefs.getString("email")}');
     await prefs.setInt('counter', counter);
     await prefs.setString("email", email);
+    return prefs.getInt("counter");
   }
 
   bool isEmail(String em) {
