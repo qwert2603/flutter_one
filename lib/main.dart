@@ -2,6 +2,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_one/anim.dart';
+import 'package:flutter_one/form.dart';
 import 'package:flutter_one/isol.dart';
 import 'package:flutter_one/lifecycle.dart';
 import 'package:flutter_one/localizations.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         dividerColor: Colors.deepOrange,
         accentColor: Colors.yellow,
         splashColor: Colors.cyan.withAlpha(42),
+        fontFamily: "google_sans",
       ),
       home: RandomWords(),
       routes: <String, WidgetBuilder>{
@@ -164,6 +166,10 @@ class RandomWordsState extends State<RandomWords> {
               icon: const Icon(Icons.details),
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => LifecycleWatcher()))),
+          IconButton(
+              icon: const Icon(Icons.style),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => FormWidget()))),
         ],
       ),
       body: _buildSuggestions(),
