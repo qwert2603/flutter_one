@@ -30,7 +30,7 @@ class FormWidgetState extends State<FormWidget> {
                   EmailTextField(),
                   SizedBox(height: 24),
                   Text(
-                    "${AppLocalizations.of(context).hello} " * 42,
+                    "${AppLocalizations.of(context).hello} " * 2,
                     style: TextStyle(fontSize: 26),
                   ),
                 ],
