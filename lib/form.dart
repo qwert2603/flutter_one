@@ -7,8 +7,6 @@ class FormWidget extends StatefulWidget {
 }
 
 class FormWidgetState extends State<FormWidget> {
-  String _errorText;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,29 +16,74 @@ class FormWidgetState extends State<FormWidget> {
           style: TextStyle(decoration: TextDecoration.underline),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "hintText",
-                errorText: _errorText,
+      body: Scrollbar(
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  EmailTextField(),
+                  SizedBox(height: 24),
+                  EmailTextField(),
+                  SizedBox(height: 24),
+                  Text(
+                    "${AppLocalizations.of(context).hello} " * 42,
+                    style: TextStyle(fontSize: 26),
+                  ),
+                ],
               ),
-              onChanged: (text) {
-                setState(() {
-                  _errorText = isEmail(text) ? null : "not a email!";
-                });
-              },
             ),
-            SizedBox(height: 24),
-            Text(AppLocalizations.of(context).hello)
           ],
         ),
       ),
+    );
+  }
+}
+
+class EmailTextField extends StatefulWidget {
+  @override
+  _EmailTextFieldState createState() => _EmailTextFieldState();
+}
+
+class _EmailTextFieldState extends State<EmailTextField> {
+  String _errorText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: "hintText",
+        errorText: _errorText,
+      ),
+      onChanged: (text) {
+        setState(() {
+          _errorText = isEmail(text) ? null : "not a email!";
+        });
+      },
+      onSubmitted: (text) async {
+        var result = await showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => AlertDialog(
+                  content: Text(text),
+                  title: Text("title"),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () => Navigator.of(context).pop(26),
+                      child: Text("ok"),
+                    )
+                  ],
+                ));
+        print("$result");
+        Scaffold.of(context).showSnackBar(new SnackBar(
+          duration: Duration(seconds: 2),
+          content: new Text("$result"),
+        ));
+      },
     );
   }
 

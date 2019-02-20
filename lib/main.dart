@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green,
         dividerColor: Colors.deepOrange,
-        accentColor: Colors.yellow,
+        accentColor: Colors.deepPurple,
         splashColor: Colors.cyan.withAlpha(42),
         fontFamily: "google_sans",
       ),
