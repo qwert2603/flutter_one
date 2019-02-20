@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_one/localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormWidget extends StatefulWidget {
   @override
@@ -55,8 +56,8 @@ class _EmailTextFieldState extends State<EmailTextField> {
     return TextField(
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
+        labelText: "labelText",
         border: OutlineInputBorder(),
-        hintText: "hintText",
         errorText: _errorText,
       ),
       onChanged: (text) {
@@ -65,6 +66,7 @@ class _EmailTextFieldState extends State<EmailTextField> {
         });
       },
       onSubmitted: (text) async {
+        _saveEmail(text);
         var result = await showDialog(
             context: context,
             barrierDismissible: false,
@@ -73,18 +75,26 @@ class _EmailTextFieldState extends State<EmailTextField> {
                   title: Text("title"),
                   actions: <Widget>[
                     FlatButton(
-                      onPressed: () => Navigator.of(context).pop(26),
+                      onPressed: () => Navigator.of(context).pop(text),
                       child: Text("ok"),
                     )
                   ],
                 ));
-        print("$result");
         Scaffold.of(context).showSnackBar(new SnackBar(
           duration: Duration(seconds: 2),
           content: new Text("$result"),
         ));
       },
     );
+  }
+
+  _saveEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int counter = (prefs.getInt('counter') ?? 0) + 1;
+    print('Pressed $counter times.');
+    print('prev email =  ${prefs.getString("email")}');
+    await prefs.setInt('counter', counter);
+    await prefs.setString("email", email);
   }
 
   bool isEmail(String em) {
