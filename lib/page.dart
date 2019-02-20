@@ -49,10 +49,41 @@ class QPage extends StatelessWidget {
               appBar: AppBar(
                 title: Text(AppLocalizations.of(context).another),
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Center(
-                  child: Image.asset("assets/images/ocv.jpg"),
+              body: Container(
+//                constraints: BoxConstraints.expand(),
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: <Widget>[
+                    Image.asset("assets/images/ocv.jpg"),
+                    Text(
+                      "text0",
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 32,
+                      ),
+                    ),
+                    Positioned(
+                      left: 12,
+                      top: 72,
+                      child: Text(
+                        "text1",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 32,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional.bottomCenter,
+                      child: Text(
+                        "text2",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 32,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
