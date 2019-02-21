@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_one/game.dart';
 import 'package:flutter_one/localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,16 @@ class FormWidgetState extends State<FormWidget> {
           "form",
           style: TextStyle(decoration: TextDecoration.underline),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.videogame_asset),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return GamePage();
+              }));
+            },
+          )
+        ],
       ),
       body: Scrollbar(
         child: ListView(
