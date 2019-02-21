@@ -44,50 +44,7 @@ class QPage extends StatelessWidget {
 
   void openFullPicture(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (BuildContext context) => Scaffold(
-              appBar: AppBar(
-                title: Text(AppLocalizations.of(context).another),
-              ),
-              body: Container(
-//                constraints: BoxConstraints.expand(),
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: <Widget>[
-                    Image.asset("assets/images/ocv.jpg"),
-                    Text(
-                      "text0",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 32,
-                      ),
-                    ),
-                    Positioned(
-                      left: 12,
-                      top: 72,
-                      child: Text(
-                        "text1",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 32,
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      child: Text(
-                        "text2",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 32,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-      ),
+      MaterialPageRoute(builder: (BuildContext context) => FullOCVPicture()),
     );
   }
 }
@@ -140,5 +97,63 @@ class _FromAndroidReceiverState extends State<FromAndroidReceiver> {
         data = sharedData;
       });
     }
+  }
+}
+
+class FullOCVPicture extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).another),
+      ),
+      body: Container(
+        color: Colors.pink,
+//        constraints: BoxConstraints.expand(),
+        child: Stack(
+          alignment: AlignmentDirectional.centerEnd,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Container(
+                color: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Image.asset("assets/images/ocv.jpg"),
+                ),
+              ),
+            ),
+            Text(
+              "text0",
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 32,
+              ),
+            ),
+            Positioned(
+              left: 12,
+              top: 72,
+              child: Text(
+                "text1",
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 32,
+                ),
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional.bottomCenter,
+              child: Text(
+                "text2",
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 32,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
