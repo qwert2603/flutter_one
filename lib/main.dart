@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.deepPurple,
         splashColor: Colors.cyan.withAlpha(42),
         fontFamily: "google_sans",
+//        brightness: Brightness.dark,
+//        primaryColorBrightness: Brightness.dark,
       ),
       home: RandomWords(),
       routes: <String, WidgetBuilder>{

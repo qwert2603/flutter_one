@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_one/localizations.dart';
+import 'package:flutter_one/relative.dart';
 
 class QPage extends StatelessWidget {
   final String text;
@@ -35,6 +36,15 @@ class QPage extends StatelessWidget {
               color: Colors.deepOrange,
               onPressed: () => openFullPicture(context),
               child: Text("image", style: TextStyle(color: Colors.white)),
+            ),
+            SizedBox(height: 12),
+            MaterialButton(
+              color: Colors.deepOrange,
+              onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => HomeScreen()),
+                  ),
+              child: Text("HomeScreen", style: TextStyle(color: Colors.white)),
             )
           ],
         ),
