@@ -73,16 +73,39 @@ class Song extends StatelessWidget {
 class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Song(title: 'Trapadelic lobo', author: 'lillobobeats', likes: 4),
-        Song(title: 'Different', author: 'younglowkey', likes: 23),
-        Song(title: 'Future', author: 'younglowkey', likes: 2),
-        Song(title: 'ASAP', author: 'tha_producer808', likes: 13),
-        Song(title: '🌲🌲🌲', author: 'TraphousePeyton'),
-        Song(title: 'Something sweet...', author: '6ryan'),
-        Song(title: 'Sharpie', author: 'Fergie_6'),
-      ],
+    return Scrollbar(
+      child: ListView(
+        children: [
+          Song(
+              title:
+                  'Trapadelic lobo Trapadelic lobo Trapadelic lobo Trapadelic lobo',
+              author:
+                  'younglowkey younglowkey younglowkey younglowkey younglowkey younglowkey younglowkey',
+              likes: 23),
+          Song(
+              title:
+                  'Trapadelic lobo Trapadelic lobo Trapadelic lobo Trapadelic lobo',
+              author: 'lillobobeats',
+              likes: 4),
+          Song(
+              title: 'Different',
+              author:
+                  'younglowkey younglowkey younglowkey younglowkey younglowkey younglowkey younglowkey',
+              likes: 23),
+          Song(title: 'Future', author: 'younglowkey', likes: 2),
+          Song(title: 'ASAP', author: 'tha_producer808', likes: 13),
+          Song(title: '🌲🌲🌲', author: 'TraphousePeyton'),
+          Song(title: 'Something sweet...', author: '6ryan'),
+          Song(title: 'Sharpie', author: 'Fergie_6'),
+          Song(title: '_Trapadelic lobo', author: 'lillobobeats', likes: 4),
+          Song(title: '_Different', author: 'younglowkey', likes: 23),
+          Song(title: '_Future', author: 'younglowkey', likes: 2),
+          Song(title: '_ASAP', author: 'tha_producer808', likes: 13),
+          Song(title: '_🌲🌲🌲', author: 'TraphousePeyton'),
+          Song(title: '_Something sweet...', author: '6ryan'),
+          Song(title: '_Sharpie', author: 'Fergie_6'),
+        ],
+      ),
     );
   }
 }
