@@ -22,6 +22,10 @@ class _GamePageState extends State<GamePage> {
               textAlign: TextAlign.center,
             ),
           ),
+          StreamBuilder<int>(
+            builder: (context, snapshot) => Text(snapshot.data.toString()),
+            stream: intsStream(),
+          ),
           Expanded(
             child: GridView.count(
               crossAxisCount: 3,
@@ -49,17 +53,32 @@ class _GamePageState extends State<GamePage> {
       case 2:
         return Border(left: borderSide, bottom: borderSide);
       case 3:
-        return Border(right: borderSide, top: borderSide,bottom: borderSide);
+        return Border(right: borderSide, top: borderSide, bottom: borderSide);
       case 4:
-        return Border(left: borderSide, right: borderSide, top: borderSide,bottom: borderSide);
+        return Border(
+            left: borderSide,
+            right: borderSide,
+            top: borderSide,
+            bottom: borderSide);
       case 5:
-        return Border(left: borderSide, top: borderSide,bottom: borderSide);
+        return Border(left: borderSide, top: borderSide, bottom: borderSide);
       case 6:
         return Border(right: borderSide, top: borderSide);
       case 7:
         return Border(left: borderSide, right: borderSide, top: borderSide);
       case 8:
         return Border(left: borderSide, top: borderSide);
+      default:
+        return Border();
     }
+  }
+}
+
+Stream<int> intsStream() async* {
+  int i = 0;
+  while (true) {
+    yield i++;
+
+    await Future.delayed(Duration(seconds: 1));
   }
 }
