@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_one/bloc.dart';
 import 'package:flutter_one/game.dart';
 import 'package:flutter_one/localizations.dart';
+import 'package:flutter_one/redx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FormWidget extends StatefulWidget {
@@ -28,6 +29,11 @@ class FormWidgetState extends State<FormWidget> {
             icon: Icon(Icons.block),
             onPressed: () => Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => CounterScreen())),
+          ),
+          IconButton(
+            icon: Icon(Icons.redeem),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => Redx())),
           ),
         ],
       ),

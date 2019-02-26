@@ -8,8 +8,24 @@ import 'package:flutter_one/lifecycle.dart';
 import 'package:flutter_one/localizations.dart';
 import 'package:flutter_one/page.dart';
 import 'package:flutter_one/paint.dart';
+import 'package:flutter_one/redx.dart';
+import 'package:redux_dev_tools/redux_dev_tools.dart';
+import 'package:redux_epics/redux_epics.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  final store = DevToolsStore<RedxState>(
+    RedxReducer(),
+    initialState: RedxState(false, [], ""),
+    middleware: [
+      finishRefresh(),
+      EpicMiddleware<RedxState>(LoadEpic()),
+    ],
+  );
+
+  runApp(Redx(store: store));
+
+//  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
