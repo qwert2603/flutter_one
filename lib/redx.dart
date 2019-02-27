@@ -20,7 +20,12 @@ class Redx extends StatelessWidget {
         builder: (context, store) {
           return Scaffold(
             appBar: AppBar(title: Text("Redx")),
-            body: ScreenWidget(),
+            body: Stack(
+              children: <Widget>[
+                ScreenWidget(),
+                RefreshErrorSnackbar(),
+              ],
+            ),
           );
         },
       ),
@@ -31,9 +36,10 @@ class Redx extends StatelessWidget {
 class ScreenViewModel {
   final RedxState state;
   final Function(String search) onSearch;
+  final Function() onReload;
   final Future<void> Function() onRefresh;
 
-  ScreenViewModel(this.state, this.onSearch, this.onRefresh);
+  ScreenViewModel(this.state, this.onSearch, this.onReload, this.onRefresh);
 }
 
 class ScreenWidget extends StatelessWidget {
@@ -43,6 +49,7 @@ class ScreenWidget extends StatelessWidget {
       converter: (store) => ScreenViewModel(
             store.state,
             (s) => store.dispatch(SearchItems(s)),
+            () => store.dispatch(LoadItems()),
             () {
               var action = RefreshItems();
               store.dispatch(action);
@@ -50,6 +57,32 @@ class ScreenWidget extends StatelessWidget {
             },
           ),
       builder: (context, vm) {
+        var content;
+
+        if (vm.state.loading) {
+          content = Center(child: CircularProgressIndicator());
+        } else if (vm.state.loadError) {
+          content = Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("load error"),
+              SizedBox(height: 16),
+              OutlineButton(
+                highlightedBorderColor: Colors.deepOrange,
+                borderSide: BorderSide(color: Colors.amber, width: 2),
+                onPressed: vm.onReload,
+                child: Text("reload"),
+              ),
+            ],
+          ));
+        } else {
+          content = RefreshIndicator(
+            child: ItemsListWidget(),
+            onRefresh: vm.onRefresh,
+          );
+        }
+
         return Column(
           children: <Widget>[
             Padding(
@@ -63,14 +96,7 @@ class ScreenWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Flexible(
-              child: vm.state.loading
-                  ? Center(child: CircularProgressIndicator())
-                  : RefreshIndicator(
-                      child: ItemsListWidget(),
-                      onRefresh: vm.onRefresh,
-                    ),
-            )
+            Flexible(child: content)
           ],
         );
       },
@@ -100,6 +126,47 @@ class ItemsListWidget extends StatelessWidget {
   }
 }
 
+class RefreshErrorSnackbar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<RedxState, RefreshErrorSnackbarVM>(
+      converter: (store) => RefreshErrorSnackbarVM(
+            store.state.refreshError,
+            () => store.dispatch(RefreshItems()),
+          ),
+      builder: (context, refreshError) => Container(),
+      distinct: true,
+      onWillChange: (vm) {
+        print("RefreshErrorSnackbar onWillChange ${vm.refreshError}");
+        if (vm.refreshError) {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text("refresh error!"),
+            duration: Duration(seconds: 2),
+            action: SnackBarAction(label: "retry", onPressed: vm.onRetry),
+          ));
+        }
+      },
+    );
+  }
+}
+
+class RefreshErrorSnackbarVM {
+  final bool refreshError;
+  final Function() onRetry;
+
+  RefreshErrorSnackbarVM(this.refreshError, this.onRetry);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RefreshErrorSnackbarVM &&
+          runtimeType == other.runtimeType &&
+          refreshError == other.refreshError;
+
+  @override
+  int get hashCode => refreshError.hashCode;
+}
+
 class RedxItem {
   final String text;
 
@@ -111,9 +178,28 @@ class RedxState {
 
   final List<RedxItem> items;
 
+  final bool loadError;
+
   final String search;
 
-  RedxState(this.loading, this.items, this.search);
+  final bool refreshError;
+
+  RedxState(
+      this.loading, this.items, this.loadError, this.search, this.refreshError);
+
+  RedxState copy(
+      {bool loading,
+      List<RedxItem> items,
+      bool loadError,
+      String search,
+      bool refreshError}) {
+    return RedxState(
+        loading ?? this.loading,
+        items ?? this.items,
+        loadError ?? this.loadError,
+        search ?? this.search,
+        refreshError ?? this.refreshError);
+  }
 }
 
 abstract class RedxAction {}
@@ -121,6 +207,8 @@ abstract class RedxAction {}
 class LoadItems implements RedxAction {}
 
 class LoadItemsStarted implements RedxAction {}
+
+class LoadItemsError implements RedxAction {}
 
 class SearchItems implements RedxAction {
   final String query;
@@ -138,18 +226,22 @@ class ItemsLoaded implements RedxAction {
   ItemsLoaded(this.items);
 }
 
+class RefreshError implements RedxAction {}
+
 class RedxReducer extends TypedReducer<RedxState, RedxAction> {
   RedxReducer()
       : super((RedxState state, RedxAction action) {
           print("RedxReducer $action");
           if (action is LoadItems) return state;
           if (action is LoadItemsStarted)
-            return RedxState(true, state.items, state.search);
-          if (action is SearchItems)
-            return RedxState(state.loading, state.items, action.query);
-          if (action is RefreshItems) return state;
+            return state.copy(loading: true, loadError: false);
+          if (action is LoadItemsError)
+            return state.copy(loading: false, loadError: true);
+          if (action is SearchItems) return state.copy(search: action.query);
+          if (action is RefreshItems) return state.copy(refreshError: false);
           if (action is ItemsLoaded)
-            return RedxState(false, action.items, state.search);
+            return state.copy(loading: false, items: action.items);
+          if (action is RefreshError) return state.copy(refreshError: true);
           throw Exception("unknow action $action");
         });
 }
@@ -159,18 +251,26 @@ class LoadEpic implements EpicClass<RedxState> {
   Stream call(Stream actions, EpicStore<RedxState> store) {
     var observable = Observable(actions);
     return Observable.merge([
-      observable.ofType(TypeToken<LoadItems>()).map((_) => ""),
+      observable.ofType(TypeToken<LoadItems>()).map((_) => store.state.search),
       observable
           .ofType(TypeToken<SearchItems>())
           .debounce(Duration(milliseconds: 300))
           .map((a) => a.query),
-    ]).switchMap((s) async* {
-      yield LoadItemsStarted();
-      var items = await Future.delayed(
-        Duration(seconds: 5, milliseconds: 0),
-        () => _loadThem(s),
+    ]).switchMap((s) {
+      final future = Future.delayed(
+        Duration(seconds: 2, milliseconds: 0),
+        () {
+          if (s == "s") throw Exception("searct = s");
+          return _loadThem(s);
+        },
       );
-      yield ItemsLoaded(items);
+
+      return Observable(future.asStream())
+          .map<RedxAction>((items) => ItemsLoaded(items))
+          .onErrorResume((e) {
+        print(e);
+        return Observable.just(LoadItemsError());
+      }).startWith(LoadItemsStarted());
     });
   }
 }
@@ -188,19 +288,28 @@ class RefreshEpic implements EpicClass<RedxState> {
         }
       }
 
-      return Observable(_loadStream(store.state.search))
-          .map((items) => ItemsLoaded(items))
+      final s = store.state.search;
+
+      final future = Future.delayed(
+        Duration(seconds: 2, milliseconds: 0),
+        () {
+          if (s == "th") throw Exception("searct = th");
+          return _loadThem(s);
+        },
+      );
+
+      return Observable(future.asStream())
+          .map<RedxAction>((items) => ItemsLoaded(items))
+          .onErrorResume((e) {
+            print(e);
+            return Observable.just(RefreshError());
+          })
           .doOnDone(onFinish)
           .doOnCancel(onFinish)
           .takeUntil(
               observable.where((a) => a is LoadItems || a is SearchItems));
     });
   }
-}
-
-Stream<List<RedxItem>> _loadStream(String q) async* {
-  await Future.delayed(Duration(seconds: 5));
-  yield _loadThem(q);
 }
 
 List<RedxItem> _loadThem(String q) {

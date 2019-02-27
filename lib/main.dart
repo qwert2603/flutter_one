@@ -14,7 +14,7 @@ import 'package:redux_epics/redux_epics.dart';
 
 final store = DevToolsStore<RedxState>(
   RedxReducer(),
-  initialState: RedxState(false, [], ""),
+  initialState: RedxState(false, [], false, "", false),
   middleware: [
     EpicMiddleware<RedxState>(LoadEpic()),
     EpicMiddleware<RedxState>(RefreshEpic()),
