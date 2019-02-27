@@ -3,7 +3,7 @@ import 'package:flutter_one/bloc.dart';
 import 'package:flutter_one/game.dart';
 import 'package:flutter_one/localizations.dart';
 import 'package:flutter_one/main.dart';
-import 'package:flutter_one/redx.dart';
+import 'package:flutter_one/redx/redx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FormWidget extends StatefulWidget {
