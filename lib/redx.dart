@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 class Redx extends StatelessWidget {
   final Store<RedxState> store;
 
-  const Redx({Key key, this.store}) : super(key: key);
+  const Redx({Key key, @required this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +18,9 @@ class Redx extends StatelessWidget {
       child: StoreBuilder<RedxState>(
         onInit: (store) => store.dispatch(LoadItems()),
         builder: (context, store) {
-          return MaterialApp(
-            home: Scaffold(
-              appBar: AppBar(title: Text("Redx")),
-              body: ScreenWidget(),
-            ),
+          return Scaffold(
+            appBar: AppBar(title: Text("Redx")),
+            body: ScreenWidget(),
           );
         },
       ),
@@ -66,7 +64,7 @@ class ScreenWidget extends StatelessWidget {
               ),
             ),
             Flexible(
-              child: vm.state.items.isEmpty
+              child: vm.state.loading
                   ? Center(child: CircularProgressIndicator())
                   : RefreshIndicator(
                       child: ItemsListWidget(),
@@ -143,6 +141,7 @@ class ItemsLoaded implements RedxAction {
 class RedxReducer extends TypedReducer<RedxState, RedxAction> {
   RedxReducer()
       : super((RedxState state, RedxAction action) {
+          print("RedxReducer $action");
           if (action is LoadItems) return state;
           if (action is LoadItemsStarted)
             return RedxState(true, state.items, state.search);
@@ -161,14 +160,14 @@ class LoadEpic implements EpicClass<RedxState> {
     var observable = Observable(actions);
     return Observable.merge([
       observable.ofType(TypeToken<LoadItems>()).map((_) => ""),
-      observable.ofType(TypeToken<SearchItems>()).map((a) => a.query),
       observable
-          .ofType(TypeToken<RefreshItems>())
-          .map((_) => store.state.search),
+          .ofType(TypeToken<SearchItems>())
+          .debounce(Duration(milliseconds: 300))
+          .map((a) => a.query),
     ]).switchMap((s) async* {
       yield LoadItemsStarted();
       var items = await Future.delayed(
-        Duration(seconds: 1, milliseconds: 500),
+        Duration(seconds: 5, milliseconds: 0),
         () => _loadThem(s),
       );
       yield ItemsLoaded(items);
@@ -176,32 +175,49 @@ class LoadEpic implements EpicClass<RedxState> {
   }
 }
 
-Middleware<RedxState> finishRefresh() {
-  RefreshItems refreshItems;
-  return (Store<RedxState> store, dynamic action, NextDispatcher next) {
-    if (action is RefreshItems) {
-      refreshItems = action;
-    }
-    if (action is LoadItems || action is SearchItems || action is ItemsLoaded) {
-      refreshItems?.completer?.complete();
-      refreshItems = null;
-    }
-    next(action);
-  };
+class RefreshEpic implements EpicClass<RedxState> {
+  @override
+  Stream call(Stream<dynamic> actions, EpicStore<RedxState> store) {
+    var observable = Observable(actions);
+
+    return observable.ofType(TypeToken<RefreshItems>()).switchMap((action) {
+      onFinish() {
+        print("RefreshItems.completer.complete()");
+        if (!action.completer.isCompleted) {
+          action.completer.complete();
+        }
+      }
+
+      return Observable(_loadStream(store.state.search))
+          .map((items) => ItemsLoaded(items))
+          .doOnDone(onFinish)
+          .doOnCancel(onFinish)
+          .takeUntil(
+              observable.where((a) => a is LoadItems || a is SearchItems));
+    });
+  }
 }
 
-List<RedxItem> _loadThem(String q) => [
-      "one",
-      "two",
-      "three",
-      "four",
-      "five",
-      "six",
-      "seven",
-      "eigth",
-      "nine",
-      "ten"
-    ]
-        .where((s) => s.toLowerCase().contains(q.toLowerCase()))
-        .map((s) => RedxItem(s))
-        .toList();
+Stream<List<RedxItem>> _loadStream(String q) async* {
+  await Future.delayed(Duration(seconds: 5));
+  yield _loadThem(q);
+}
+
+List<RedxItem> _loadThem(String q) {
+  print("_loadThem _${q}_");
+  return [
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eigth",
+    "nine",
+    "ten"
+  ]
+      .where((s) => s.toLowerCase().contains(q.toLowerCase()))
+      .map((s) => RedxItem(s))
+      .toList();
+}

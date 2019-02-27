@@ -12,19 +12,17 @@ import 'package:flutter_one/redx.dart';
 import 'package:redux_dev_tools/redux_dev_tools.dart';
 import 'package:redux_epics/redux_epics.dart';
 
+final store = DevToolsStore<RedxState>(
+  RedxReducer(),
+  initialState: RedxState(false, [], ""),
+  middleware: [
+    EpicMiddleware<RedxState>(LoadEpic()),
+    EpicMiddleware<RedxState>(RefreshEpic()),
+  ],
+);
+
 void main() {
-  final store = DevToolsStore<RedxState>(
-    RedxReducer(),
-    initialState: RedxState(false, [], ""),
-    middleware: [
-      finishRefresh(),
-      EpicMiddleware<RedxState>(LoadEpic()),
-    ],
-  );
-
-  runApp(Redx(store: store));
-
-//  runApp(MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

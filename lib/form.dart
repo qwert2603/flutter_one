@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_one/bloc.dart';
 import 'package:flutter_one/game.dart';
 import 'package:flutter_one/localizations.dart';
+import 'package:flutter_one/main.dart';
 import 'package:flutter_one/redx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,8 +33,8 @@ class FormWidgetState extends State<FormWidget> {
           ),
           IconButton(
             icon: Icon(Icons.redeem),
-            onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Redx())),
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => Redx(store: store))),
           ),
         ],
       ),
