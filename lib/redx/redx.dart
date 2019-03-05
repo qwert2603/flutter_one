@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_one/redx/refresh_error_snackbar.dart';
 import 'package:flutter_one/redx/actions.dart';
 import 'package:flutter_one/redx/screen.dart';
 import 'package:flutter_one/redx/state.dart';
@@ -21,16 +19,10 @@ class Redx extends StatelessWidget {
         builder: (context, store) {
           return Scaffold(
             appBar: AppBar(title: Text("Redx")),
-            body: Stack(
-              children: <Widget>[
-                ScreenWidget(),
-                RefreshErrorSnackbar(),
-              ],
-            ),
+            body: ScreenWidget(),
           );
         },
       ),
     );
   }
 }
-
